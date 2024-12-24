@@ -1,0 +1,39 @@
+name: Deploy to Kubernetes
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'latest'
+
+    - name: Deploy Nginx Deployment
+      run: |
+        kubectl apply -f manifests/nginx-deployment.yaml
+
+    - name: Deploy NodePort Service
+      run: |
+        kubectl apply -f manifests/nginx-service-nodeport.yaml
+
+    - name: Deploy LoadBalancer Service
+      run: |
+        kubectl apply -f manifests/nginx-service-loadbalancer.yaml
+
+    - name: Deploy StatefulSet
+      run: |
+        kubectl apply -f manifests/db-statefulset.yaml
+
+    - name: Deploy Namespace and App
+      run: |
+        kubectl apply -f manifests/namespace-deployment.yaml
