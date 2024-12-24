@@ -1,0 +1,3 @@
+output "nginx_nodeport_url" {
+  value = "http://<NodeIP>:${kubernetes_service.nginx_nodeport.spec.0.ports.0.node_port}"
+}
